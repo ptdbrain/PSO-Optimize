@@ -1,0 +1,7 @@
+# Ket qua tho (sinh lai bang run_CEC2017_comparison)
+*.mat
+
+# File tam cua MATLAB / Excel
+*.asv
+*.m~
+~$*.xlsx
