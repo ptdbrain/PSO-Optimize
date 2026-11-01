@@ -8,8 +8,7 @@ function out = single_run(alg_name, func_num, cfg, seed, cp_fes, cec_fes)
     fstar = 100 * func_num;
 
     t0 = tic;
-    [val, x, cv, cf] = alg(@cec17_func, func_num, cfg.D, cfg.NP, ...
-                           cfg.MaxFEs, cfg.MaxGen, cfg.lb, cfg.ub);
+    [val, x, cv, cf] = alg(@cec17_func, func_num, cfg.D, cfg.MaxFEs, cfg.lb, cfg.ub);
     out.time = toc(t0);
 
     out.err = clip_err(val - fstar);
@@ -26,12 +25,15 @@ function e = clip_err(e)
 end
 
 function y = sample_curve(cv, cf, points)
-% Gia tri tot nhat tai moi moc FEs (bac thang: gia tri cua the he gan nhat
-% co so FEs <= moc).
+% Gia tri tot nhat tai moi moc FEs (tang dan): gia tri cua the he cuoi cung
+% co so FEs <= moc.
     y = zeros(1, numel(points));
+    n = numel(cf);
+    j = 1;
     for k = 1:numel(points)
-        idx = find(cf <= points(k), 1, 'last');
-        if isempty(idx), idx = 1; end
-        y(k) = cv(idx);
+        while j < n && cf(j + 1) <= points(k)
+            j = j + 1;
+        end
+        y(k) = cv(j);
     end
 end

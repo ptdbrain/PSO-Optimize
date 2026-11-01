@@ -12,8 +12,10 @@ function plot_convergence(R, fig_dir)
 
     colors = [0.000 0.447 0.741; 0.850 0.325 0.098; ...
               0.466 0.674 0.188; 0.494 0.184 0.556; ...
-              0.929 0.694 0.125; 0.301 0.745 0.933];
-    markers = {'o', 's', '^', 'd', 'v', 'p'};
+              0.929 0.694 0.125; 0.301 0.745 0.933; ...
+              0.635 0.078 0.184; 0.250 0.250 0.250];
+    markers = {'o', 's', '^', 'd', 'v', 'p', 'h', '>'};
+    nc = size(colors, 1);
     mk_idx = round(linspace(1, numel(x), 10));
 
     if ~exist(fig_dir, 'dir'), mkdir(fig_dir); end
@@ -25,8 +27,8 @@ function plot_convergence(R, fig_dir)
         for a = 1:nA
             y = mean(reshape(R.(algs{a}).curve(i, :, :), cfg.runs, []), 1);
             semilogy(x, max(y, floor_val), 'LineWidth', 1.6, ...
-                'Color', colors(mod(a - 1, 6) + 1, :), ...
-                'Marker', markers{mod(a - 1, 6) + 1}, 'MarkerIndices', mk_idx);
+                'Color', colors(mod(a - 1, nc) + 1, :), ...
+                'Marker', markers{mod(a - 1, nc) + 1}, 'MarkerIndices', mk_idx);
         end
         set(gca, 'YScale', 'log');
         grid on; box on;
@@ -48,7 +50,7 @@ function plot_convergence(R, fig_dir)
         for a = 1:nA
             y = mean(reshape(R.(algs{a}).curve(i, :, :), cfg.runs, []), 1);
             semilogy(x, max(y, floor_val), 'LineWidth', 1.2, ...
-                'Color', colors(mod(a - 1, 6) + 1, :));
+                'Color', colors(mod(a - 1, nc) + 1, :));
         end
         set(gca, 'YScale', 'log', 'FontSize', 8);
         grid on; box on;

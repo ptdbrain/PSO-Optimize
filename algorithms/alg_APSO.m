@@ -1,4 +1,4 @@
-function [gbestval, gbest, curve_val, curve_fes] = alg_APSO(fhd, func_num, D, NP, MaxFEs, MaxGen, lb, ub)
+function [gbestval, gbest, curve_val, curve_fes] = alg_APSO(fhd, func_num, D, MaxFEs, lb, ub)
 % ALG_APSO  Toi uu bay dan thich nghi (APSO) - phien ban goc
 % Z.-H. Zhan, J. Zhang, Y. Li, H. S.-H. Chung, "Adaptive Particle Swarm
 % Optimization", IEEE Trans. SMC-B, 39(6), 1362-1381, 2009.
@@ -12,7 +12,14 @@ function [gbestval, gbest, curve_val, curve_fes] = alg_APSO(fhd, func_num, D, NP
 %      c1, c2 trong [1.5, 2.5], c1 + c2 <= 4.
 %   4. Hoc uu tu (ELS) tren gbest khi o trang thai hoi tu S3,
 %      sigma giam tuyen tinh 1.0 -> 0.1.
+%
+% Dau ra:
+%   gbestval  - gia tri tot nhat tim duoc
+%   gbest     - nghiem tot nhat (1 x D)
+%   curve_val - gia tri tot nhat sau moi the he
+%   curve_fes - so lan danh gia ham tuong ung voi curve_val
 
+    NP = 20;                        % Kich thuoc bay theo bai bao goc
     sigma_max = 1.0; sigma_min = 0.1;
 
     lb = repmat(lb, 1, D / numel(lb));
@@ -34,13 +41,13 @@ function [gbestval, gbest, curve_val, curve_fes] = alg_APSO(fhd, func_num, D, NP
     c1 = 2.0; c2 = 2.0;
     state = 1;                      % Trang thai ban dau: S1 (tham do)
 
-    curve_val = zeros(1, MaxGen);
-    curve_fes = zeros(1, MaxGen);
+    curve_val = zeros(1, MaxFEs);
+    curve_fes = zeros(1, MaxFEs);
     gen = 1;
     curve_val(gen) = gbestval;
     curve_fes(gen) = FEs;
 
-    while FEs < MaxFEs && gen < MaxGen
+    while FEs < MaxFEs
         gen = gen + 1;
 
         % --- 1. ESE: he so tien hoa f ---

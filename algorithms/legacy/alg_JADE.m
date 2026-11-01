@@ -1,10 +1,11 @@
-function [bestval, bestx, curve_val, curve_fes] = alg_JADE(fhd, func_num, D, NP, MaxFEs, MaxGen, lb, ub)
+function [bestval, bestx, curve_val, curve_fes] = alg_JADE(fhd, func_num, D, MaxFEs, lb, ub)
 % ALG_JADE  DE thich nghi voi kho luu tru ngoai (JADE)
 % J. Zhang and A. C. Sanderson, "JADE: Adaptive Differential Evolution With
 % Optional External Archive", IEEE Trans. Evol. Comput., 13(5), 945-958, 2009.
 %   Chien luoc DE/current-to-pbest/1/bin co kho luu tru
 %   p = 0.05, c = 0.1, mu_CR = mu_F = 0.5 ban dau, |A| <= NP
 
+    NP = 100;                       % Theo bai bao JADE cho D = 30
     p = 0.05;
     c = 0.1;
     mu_CR = 0.5;
@@ -23,13 +24,13 @@ function [bestval, bestx, curve_val, curve_fes] = alg_JADE(fhd, func_num, D, NP,
     archive = zeros(0, D);
     n_pbest = max(1, round(p * NP));
 
-    curve_val = zeros(1, MaxGen);
-    curve_fes = zeros(1, MaxGen);
+    curve_val = zeros(1, MaxFEs);
+    curve_fes = zeros(1, MaxFEs);
     gen = 1;
     curve_val(gen) = bestval;
     curve_fes(gen) = FEs;
 
-    while FEs < MaxFEs && gen < MaxGen
+    while FEs < MaxFEs
         gen = gen + 1;
 
         % Sinh CR_i ~ N(mu_CR, 0.1) cat ve [0, 1]

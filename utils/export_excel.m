@@ -48,6 +48,9 @@ function export_excel(R, xlsx_file)
 
     % ---------- Wilcoxon rank-sum ----------
     ref = cfg.ref_alg;
+    if ~any(strcmp(algs, ref))
+        ref = algs{1};          % Thuat toan tham chieu khong co trong danh sach
+    end
     others = setdiff(algs, {ref}, 'stable');
     T = table(fnames, 'VariableNames', {'Function'});
     summary = cell(1, numel(others));

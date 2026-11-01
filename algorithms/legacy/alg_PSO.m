@@ -1,8 +1,8 @@
-function [gbestval, gbest, curve_val, curve_fes] = alg_PSO(fhd, func_num, D, NP, MaxFEs, MaxGen, lb, ub)
+function [gbestval, gbest, curve_val, curve_fes] = alg_PSO(fhd, func_num, D, MaxFEs, lb, ub)
 % ALG_PSO  PSO goc voi trong so quan tinh giam tuyen tinh (LDIW-PSO)
-% Y. Shi and R. C. Eberhart, "A modified particle swarm optimizer",
-% IEEE ICEC 1998.
-%   w giam tuyen tinh 0.9 -> 0.4, c1 = c2 = 2, Vmax = 0.2*(ub - lb)
+% Y. Shi and R. C. Eberhart, "Empirical study of particle swarm optimization",
+% IEEE CEC 1999.
+%   NP = 30, w giam tuyen tinh 0.9 -> 0.4 theo FEs, c1 = c2 = 2, Vmax = 0.2*(ub - lb)
 %
 % Dau ra:
 %   gbestval  - gia tri tot nhat tim duoc
@@ -10,6 +10,7 @@ function [gbestval, gbest, curve_val, curve_fes] = alg_PSO(fhd, func_num, D, NP,
 %   curve_val - gia tri tot nhat sau moi the he
 %   curve_fes - so lan danh gia ham tuong ung voi curve_val
 
+    NP = 30;
     w_max = 0.9; w_min = 0.4;
     c1 = 2.0; c2 = 2.0;
 
@@ -29,15 +30,15 @@ function [gbestval, gbest, curve_val, curve_fes] = alg_PSO(fhd, func_num, D, NP,
     [gbestval, id] = min(pbestval);
     gbest = pbest(id, :);
 
-    curve_val = zeros(1, MaxGen);
-    curve_fes = zeros(1, MaxGen);
+    curve_val = zeros(1, MaxFEs);
+    curve_fes = zeros(1, MaxFEs);
     gen = 1;
     curve_val(gen) = gbestval;
     curve_fes(gen) = FEs;
 
-    while FEs < MaxFEs && gen < MaxGen
+    while FEs < MaxFEs
         gen = gen + 1;
-        w = w_max - (w_max - w_min) * (gen - 1) / (MaxGen - 1);
+        w = w_max - (w_max - w_min) * FEs / MaxFEs;
 
         vel = w * vel ...
             + c1 * rand(NP, D) .* (pbest - pos) ...

@@ -1,11 +1,12 @@
-function [bestval, bestx, curve_val, curve_fes] = alg_DE(fhd, func_num, D, NP, MaxFEs, MaxGen, lb, ub)
+function [bestval, bestx, curve_val, curve_fes] = alg_DE(fhd, func_num, D, MaxFEs, lb, ub)
 % ALG_DE  Tien hoa vi phan goc DE/rand/1/bin
 % R. Storn and K. Price, "Differential Evolution - A Simple and Efficient
 % Heuristic for Global Optimization over Continuous Spaces",
 % J. Global Optimization, 11, 341-359, 1997.
-%   F = 0.5, CR = 0.9
+%   NP = 100, F = 0.5, CR = 0.9
 %   Xu ly bien: dat lai ve trung diem giua ca the cha va bien bi vi pham.
 
+    NP = 100;
     F = 0.5;
     CR = 0.9;
 
@@ -19,13 +20,13 @@ function [bestval, bestx, curve_val, curve_fes] = alg_DE(fhd, func_num, D, NP, M
     [bestval, id] = min(fit);
     bestx = pop(id, :);
 
-    curve_val = zeros(1, MaxGen);
-    curve_fes = zeros(1, MaxGen);
+    curve_val = zeros(1, MaxFEs);
+    curve_fes = zeros(1, MaxFEs);
     gen = 1;
     curve_val(gen) = bestval;
     curve_fes(gen) = FEs;
 
-    while FEs < MaxFEs && gen < MaxGen
+    while FEs < MaxFEs
         gen = gen + 1;
 
         % Dot bien: chon r1, r2, r3 khac nhau va khac i

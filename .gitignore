@@ -5,3 +5,9 @@
 *.asv
 *.m~
 ~$*.xlsx
+
+# Nhat ky chay
+*.log
+
+# Ket qua chay thu nhanh (vi du trong README)
+results/test/
